@@ -10,11 +10,11 @@ practice-cfnは、CloudFormationを使用してAWS上でインフラ構築を自
 # 構成図
 ![practice-cfn 構成図](https://user-images.githubusercontent.com/95961416/151158194-b4077948-49cd-4231-80eb-bee6c1a5dbd6.png)
 # 各ファイルの説明  
-## Practice1_Network.yml
+## practice1_Network.yml
 ・ VPC、パブリックサブネット、プライベートサブネット、IGW、ルートテーブルを作成します。  
-## Practice2_EC2.yml
+## practice2_EC2.yml
 ・ EC2インスタンス、EC2用のセキュリティグループを作成します。  
-## Practice3_RDS.yml
+## practice3_RDS.yml
 ・ RDSインスタンス、RDS用のセキュリティグループ、サブネットグループ、パラメータグループを作成します。  
-## Practice4_ALB.yml
+## practice4_ALB.yml
 ・ ALB、ターゲットグループ、ALB用のセキュリティグループを作成します。
