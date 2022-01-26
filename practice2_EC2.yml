@@ -20,7 +20,7 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       KeyName: !Ref KeyName
-      ImageId: ami-026e38967e328a673
+      ImageId: ami-07e3fa838556c6fa9
       InstanceType: t2.micro
       NetworkInterfaces:
         - AssociatePublicIpAddress: "true"
