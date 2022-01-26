@@ -34,7 +34,7 @@ Resources:
   AttachGateway:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
-      VpcId: !Ref myVPC
+      VpcId: !Ref VPC
       InternetGatewayId: !Ref IGW
 
   # パブリックサブネット
@@ -42,7 +42,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone: ap-northeast-1a
-      VpcId: !Ref myVPC
+      VpcId: !Ref VPC
       CidrBlock: 10.0.10.0/24
       Tags:
         - Key: Name
@@ -51,7 +51,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone: ap-northeast-1c
-      VpcId: !Ref myVPC
+      VpcId: !Ref VPC
       CidrBlock: 10.0.11.0/24
       Tags:
         - Key: Name
@@ -62,7 +62,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone: ap-northeast-1a
-      VpcId: !Ref myVPC
+      VpcId: !Ref VPC
       CidrBlock: 10.0.20.0/24
       Tags:
         - Key: Name
@@ -71,7 +71,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone: ap-northeast-1c
-      VpcId: !Ref myVPC
+      VpcId: !Ref VPC
       CidrBlock: 10.0.21.0/24
       Tags:
         - Key: Name
@@ -81,14 +81,14 @@ Resources:
   PubSubRT:
     Type: AWS::EC2::RouteTable
     Properties:
-      VpcId: !Ref myVPC
+      VpcId: !Ref VPC
       Tags:
         - Key: Name
           Value: !Sub ${NameBase}-pubsub-rt
   PriSubRT:
     Type: AWS::EC2::RouteTable
     Properties:
-      VpcId: !Ref myVPC
+      VpcId: !Ref VPC
       Tags:
         - Key: Name
           Value: !Sub ${NameBase}-prisub-rt
