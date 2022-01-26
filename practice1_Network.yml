@@ -1,0 +1,153 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: Template of practice-cfn
+
+Parameters:
+  VpcCidrBlock:
+    Type: String
+    Default: 10.0.0.0/16
+  NameBase:
+    Description: Name Tag Value
+    Type: String
+    Default: practice-cfn
+
+Resources:
+  # VPC
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties: 
+      CidrBlock: !Ref VpcCidrBlock
+      EnableDnsSupport: true
+      Tags: 
+        - Key: Name
+          Value: !Sub ${NameBase}-vpc
+
+  # インターネットゲートウェイ
+  IGW:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub ${NameBase}-igw
+
+  # インターネットゲートウェイをVPCにアタッチ
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref myVPC
+      InternetGatewayId: !Ref IGW
+
+  # パブリックサブネット
+  PubSub1a:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: ap-northeast-1a
+      VpcId: !Ref myVPC
+      CidrBlock: 10.0.10.0/24
+      Tags:
+        - Key: Name
+          Value: !Sub ${NameBase}-pubsub-1a
+  PubSub1c:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: ap-northeast-1c
+      VpcId: !Ref myVPC
+      CidrBlock: 10.0.11.0/24
+      Tags:
+        - Key: Name
+          Value: !Sub ${NameBase}-pubsub-1c
+
+  # プライベートサブネット
+  PriSub1a:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: ap-northeast-1a
+      VpcId: !Ref myVPC
+      CidrBlock: 10.0.20.0/24
+      Tags:
+        - Key: Name
+          Value: !Sub ${NameBase}-prisub-1a
+  PriSub1c:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: ap-northeast-1c
+      VpcId: !Ref myVPC
+      CidrBlock: 10.0.21.0/24
+      Tags:
+        - Key: Name
+          Value: !Sub ${NameBase}-prisub-1c
+
+  # ルートテーブル
+  PubSubRT:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref myVPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${NameBase}-pubsub-rt
+  PriSubRT:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref myVPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${NameBase}-prisub-rt
+
+  # PubSubRTとインターネット間のルーティング
+  PubSubToInternet:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PubSubRT
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref IGW
+
+  # ルートテーブルをサブネットに関連付け
+  AssoPubSubRT1a:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PubSub1a
+      RouteTableId: !Ref PubSubRT
+
+  AssoPubSubRT1c:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PubSub1c
+      RouteTableId: !Ref PubSubRT
+
+  AssoPriSubRT1a:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PriSub1a
+      RouteTableId: !Ref PriSubRT
+
+  AssoPriSubRT1c:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PriSub1c
+      RouteTableId: !Ref PriSubRT
+
+Outputs:
+  VPC:
+    Value: !Ref VPC
+    Export: 
+      Name: VPC
+  
+  PubSub1a:
+    Value: !Ref PubSub1a
+    Export: 
+      Name: PubSub1a
+
+  PubSub1c:
+    Value: !Ref PubSub1c
+    Export: 
+      Name: PubSub1c
+
+  PriSub1a:
+    Value: !Ref PriSub1a
+    Export: 
+      Name: PriSub1a
+
+  PriSub1c:
+    Value: !Ref PriSub1c
+    Export: 
+      Name: PriSub1c

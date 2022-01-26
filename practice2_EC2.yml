@@ -1,0 +1,70 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: Template of practice-cfn
+
+Parameters:
+  NameBase:
+    Description: Name tag Value
+    Type: String
+    Default: practice-cfn
+  KeyName:
+    Description: The EC2 Key Pair to allow SSH access to the instance
+    Type: AWS::EC2::KeyPair::KeyName
+  AllowIP:
+    Description: IP address allowed to access EC2
+    Type: String
+
+Resources:
+  # EC2インスタンス
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      KeyName: !Ref KeyName
+      ImageId: ami-026e38967e328a673
+      InstanceType: t2.micro
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          SubnetId: !ImportValue PubSub1a
+          GroupSet:
+            - !Ref EC2SG
+      UserData: !Base64 |
+        #!/bin/bash
+        sudo yum install -y git
+      Tags:
+        - Key: Name
+          Value: !Sub ${NameBase}-ec2
+
+  # セキュリティグループ
+  EC2SG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Sub ${NameBase}-ec2-sg
+      GroupDescription: Allow SSH and HTTP access only AllowIP
+      VpcId: !ImportValue VPC
+      SecurityGroupIngress:
+        # HTTP
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: !Ref AllowIP
+        # SSH
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref AllowIP
+      Tags:
+        - Key: Name
+          Value: !Sub ${NameBase}-ec2-sg
+
+Outputs:
+
+  EC2Instance:
+    Value: !Ref EC2Instance
+    Export:
+      Name: EC2Instance
+
+  EC2SG:
+    Value: !Ref EC2SG
+    Export: 
+      Name: EC2SG
