@@ -72,7 +72,7 @@ Resources:
   RDSSecurityGroup:
     Type: "AWS::EC2::SecurityGroup"
     Properties:
-      VpcId: !ImportValue myVPC
+      VpcId: !ImportValue VPC
       GroupName: !Sub "${NameBase}-rds-sg"
       GroupDescription: !Sub "${NameBase}-rds-sg"
       Tags:
