@@ -8,7 +8,7 @@ practice-cfnは、CloudFormationを使用してAWS上でインフラ構築を自
   - ALB
   - CloudFormation  
 # 構成図
-![practice-cfn 構成図](https://user-images.githubusercontent.com/95961416/151640082-6039618b-fd94-4309-9f33-4afe8850eab3.png)
+![practice-cfn 構成図](https://user-images.githubusercontent.com/95961416/151641657-5527ad89-3ccb-449c-afb7-3de2a3a8344b.png)
 # 各ファイルの説明  
 ## practice1_Network.yml
 ・ VPC、パブリックサブネット、プライベートサブネット、IGW、ルートテーブルを作成します。  
